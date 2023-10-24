@@ -16,10 +16,10 @@ class ParticipantVisibleError(Exception):
 
 
 # Set some placeholders for global parameters
-series_id_column_name = None
-time_column_name = None
-event_column_name = None
-score_column_name = None
+series_id_column_name = "series_id"
+time_column_name = "step"
+event_column_name = "event"
+score_column_name = "score"
 use_scoring_intervals = None
 
 
@@ -345,8 +345,10 @@ def average_precision_score(matches: np.ndarray, scores: np.ndarray, p: int) -> 
 def event_detection_ap(
         solution: pd.DataFrame,
         submission: pd.DataFrame,
-        tolerances: Dict[str, List[float]],
-) -> float:
+        tolerances: Dict[str, List[float]] = {
+            "onset":  [12, 36, 60, 90, 120, 150, 180, 240, 300, 360],
+            "wakeup": [12, 36, 60, 90, 120, 150, 180, 240, 300, 360]
+        }) -> float:
 
     # Ensure solution and submission are sorted properly
     solution = solution.sort_values([series_id_column_name, time_column_name])
